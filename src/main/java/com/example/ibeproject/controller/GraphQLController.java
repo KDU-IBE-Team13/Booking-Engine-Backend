@@ -11,18 +11,18 @@ public class GraphQLController {
     GraphQLService graphQLService;
 
     @Autowired
-    public GraphQLController(GraphQLService graphQLService){
-        this.graphQLService =graphQLService;
+    public GraphQLController(GraphQLService graphQLService) {
+        this.graphQLService = graphQLService;
     }
 
 
     @GetMapping("/sampleAPI")
-    public ResponseEntity<String> getData(){
+    public ResponseEntity<String> getData() {
         return ResponseEntity.ok("testing APIs");
     }
 
     @GetMapping("/graphQlAPI")
-    public ResponseEntity<String> getDataFromGraphQL(){
+    public ResponseEntity<String> getDataFromGraphQL() {
         return graphQLService.getRooms();
     }
 }

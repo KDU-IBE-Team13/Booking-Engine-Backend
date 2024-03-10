@@ -12,7 +12,7 @@
 	<artifactId>ibeproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ibeproject</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Internet Booking engine project in Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -53,6 +53,30 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.10.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.10.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>5.10.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite</artifactId>
+			<version>1.10.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

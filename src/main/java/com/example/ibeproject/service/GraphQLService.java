@@ -19,22 +19,23 @@ public class GraphQLService {
     private static String graphqlServerUrl;
 
     private final RestTemplate restTemplate;
+
     @Autowired
     public GraphQLService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-        public ResponseEntity<String> getRooms(){
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-            httpHeaders.set("x-api-key", apiKey);
-            String requestBody = "{ \"query\": \"" + ROOMS_DATA + "\" }";
-            HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
-            try {
-                return restTemplate.exchange(graphqlServerUrl, HttpMethod.POST, requestEntity, String.class);
-            } catch (RestClientException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Error during GraphQL request", e);
-            }
+    public ResponseEntity<String> getRooms() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.set("x-api-key", apiKey);
+        String requestBody = "{ \"query\": \"" + ROOMS_DATA + "\" }";
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
+        try {
+            return restTemplate.exchange(graphqlServerUrl, HttpMethod.POST, requestEntity, String.class);
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error during GraphQL request", e);
+        }
     }
 }
