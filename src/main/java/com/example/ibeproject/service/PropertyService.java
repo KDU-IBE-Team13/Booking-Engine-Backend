@@ -1,41 +1,53 @@
 package com.example.ibeproject.service;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.ibeproject.constants.GraphQLConstants;
+import com.example.ibeproject.exceptions.PropertyException;
 
 @Service
-public class GraphQLService {
-    private static final String ROOMS_DATA = "{ listRooms {room_id room_number } }";
+public class PropertyService {
+
+    String listPropertiesQuery = GraphQLConstants.LIST_PROPERTIES_QUERY_STRING;
 
     @Value("${graphql.connection.key}")
-    private static String apiKey;
+    private String apiKey;
 
     @Value("${graphql.server.url}")
-    private static String graphqlServerUrl;
+    private String graphqlServerUrl;
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public GraphQLService(RestTemplate restTemplate) {
+    public PropertyService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<String> getRooms() {
+    public ResponseEntity<String> getAllProperties() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.set("x-api-key", apiKey);
-        String requestBody = "{ \"query\": \"" + ROOMS_DATA + "\" }";
+        httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        String requestBody = "{ \"query\": \"" + listPropertiesQuery + "\" }";
+
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
         try {
             return restTemplate.exchange(graphqlServerUrl, HttpMethod.POST, requestEntity, String.class);
         } catch (RestClientException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error during GraphQL request", e);
+            throw new PropertyException("Error fetching properties: ", e);
         }
     }
+
 }
