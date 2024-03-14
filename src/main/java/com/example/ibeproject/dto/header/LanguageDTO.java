@@ -1,6 +1,7 @@
-package com.example.ibeproject.config;
+package com.example.ibeproject.dto.header;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchFormConfigWrapper {
-    @JsonProperty("searchForm")
-    private SearchFormConfig searchFormConfig;
+public class LanguageDTO {
+    @JsonProperty("key")
+    private String key;
+
+    @JsonProperty("langName")
+    private String langName;
 }
-
-

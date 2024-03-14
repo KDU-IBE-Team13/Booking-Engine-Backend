@@ -1,4 +1,4 @@
-package com.example.ibeproject.config;
+package com.example.ibeproject.dto.landing;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GuestsConfig {
+public class GuestsConfigDTO {
     @JsonProperty("enabled")
     private boolean enabled;
 
@@ -19,6 +19,6 @@ public class GuestsConfig {
     private int maxGuests;
 
     @JsonProperty("guestTypes")
-    private List<GuestTypeConfig> guestTypes;
+    private List<GuestTypeConfigDTO> guestTypes;
 
 }

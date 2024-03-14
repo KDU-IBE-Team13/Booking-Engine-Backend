@@ -1,4 +1,4 @@
-package com.example.ibeproject.config;
+package com.example.ibeproject.dto.landing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchFormConfig {
+public class SearchFormConfigDTO {
     @JsonProperty("lengthOfStay")
     private int lengthOfStay;
 
     @JsonProperty("guests")
-    private GuestsConfig guestsConfig;
+    private GuestsConfigDTO guestsConfig;
 
     @JsonProperty("rooms")
-    private RoomsConfig roomsConfig;
+    private RoomsConfigDTO roomsConfig;
 
     @JsonProperty("wheelchairAccessible")
     private boolean wheelchairAccessible;

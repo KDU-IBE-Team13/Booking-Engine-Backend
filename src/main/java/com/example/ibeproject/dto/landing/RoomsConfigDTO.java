@@ -1,10 +1,10 @@
-package com.example.ibeproject.config;
+package com.example.ibeproject.dto.landing;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RoomsConfig {
+public class RoomsConfigDTO {
     @JsonProperty("enabled")
     private boolean enabled;
 
