@@ -1,14 +1,17 @@
 package com.example.ibeproject.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.example.ibeproject.dto.header.HeaderConfigDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class HeaderConfigService {
@@ -25,6 +28,33 @@ public class HeaderConfigService {
         this.azureBlobConnectionString = azureBlobConnectionString;
         this.containerName = containerName;
     }
+
+    public void writeConfigToAzureBlob(HeaderConfigDTO updatedConfig, String blobName) throws IOException {
+        BlobServiceClientBuilder clientBuilder = new BlobServiceClientBuilder().connectionString(azureBlobConnectionString);
+        BlobClient blobClient = clientBuilder.buildClient().getBlobContainerClient(containerName).getBlobClient(blobName);
+    
+        HeaderConfigDTO existingConfig = loadConfigFromAzureBlob(blobName);
+    
+        if (updatedConfig.getLogo() != null) {
+            existingConfig.setLogo(updatedConfig.getLogo());
+        }
+        // if (updatedConfig.getTitle() != null) {
+        //     existingConfig.setTitle(updatedConfig.getTitle());
+        // }
+        if (updatedConfig.getSupportedLanguages() != null && !updatedConfig.getSupportedLanguages().isEmpty()) {
+            existingConfig.setSupportedLanguages(updatedConfig.getSupportedLanguages());
+        }
+        if (updatedConfig.getSupportedCurrencies() != null && !updatedConfig.getSupportedCurrencies().isEmpty()) {
+            existingConfig.setSupportedCurrencies(updatedConfig.getSupportedCurrencies());
+        }
+    
+        String jsonString = objectMapper.writeValueAsString(existingConfig);
+        
+        InputStream dataStream = new ByteArrayInputStream(jsonString.getBytes(StandardCharsets.UTF_8));
+        
+        blobClient.upload(dataStream, jsonString.length(), true);
+    }
+    
 
     public HeaderConfigDTO loadConfigFromAzureBlob(String blobName) throws IOException {
         BlobServiceClientBuilder clientBuilder = new BlobServiceClientBuilder().connectionString(azureBlobConnectionString);

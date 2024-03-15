@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchFormConfigWrapperDTO {
+public class LandingConfigDTO {
+    @JsonProperty("bannerImageURL")
+    private String bannerImageURL;
+
     @JsonProperty("searchForm")
     private SearchFormConfigDTO searchFormConfig;
 }

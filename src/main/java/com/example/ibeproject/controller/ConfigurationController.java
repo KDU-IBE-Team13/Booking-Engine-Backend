@@ -3,20 +3,26 @@ package com.example.ibeproject.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ibeproject.dto.footer.FooterConfigDTO;
 import com.example.ibeproject.dto.header.HeaderConfigDTO;
+import com.example.ibeproject.dto.landing.LandingConfigDTO;
 import com.example.ibeproject.dto.landing.SearchFormConfigDTO;
 import com.example.ibeproject.exceptions.ConfigLoadException;
 import com.example.ibeproject.service.FooterConfigService;
 import com.example.ibeproject.service.HeaderConfigService;
 import com.example.ibeproject.service.LandingConfigService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/configuration")
 public class ConfigurationController {
@@ -45,7 +51,8 @@ public class ConfigurationController {
         this.landingConfigAzureFilePath = landingConfigAzureFilePath;
     }
 
-    @GetMapping("/header")
+    @CrossOrigin
+    @GetMapping(value = "/header", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HeaderConfigDTO> getHeaderConfig() {
         try {
             HeaderConfigDTO config = headerConfigService.loadConfigFromAzureBlob(headerConfigAzureFilePath);
@@ -55,7 +62,19 @@ public class ConfigurationController {
         }
     }
 
-    @GetMapping("/footer")
+    @PostMapping("/header")
+    public ResponseEntity<String> updateHeaderConfig(@RequestBody HeaderConfigDTO updatedConfig) {
+        try {
+            headerConfigService.writeConfigToAzureBlob(updatedConfig, headerConfigAzureFilePath);
+            return ResponseEntity.ok("Header config updated successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update header config: " + e.getMessage());
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/footer", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FooterConfigDTO> getFooterConfig() {
         try {
             FooterConfigDTO config = footerConfigService.loadConfigFromAzureBlob(footerConfigAzureFilePath);
@@ -65,13 +84,27 @@ public class ConfigurationController {
         }
     }
 
+    @CrossOrigin
     @GetMapping(value = "/landing-page", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SearchFormConfigDTO> getLandingPageConfig() {
+    public ResponseEntity<LandingConfigDTO> getLandingPageConfig() {
         try {
-            SearchFormConfigDTO config = landingConfigService.loadConfigFromAzureBlob(landingConfigAzureFilePath);
+            LandingConfigDTO config = landingConfigService.loadConfigFromAzureBlob(landingConfigAzureFilePath);
             return ResponseEntity.ok(config);
         } catch (IOException e) {
             throw new ConfigLoadException("Failed to load landing page config", e);
         }
     }
+
+
+    @PostMapping("/landing-page")
+    public ResponseEntity<String> updateLandingPageConfig(@RequestBody LandingConfigDTO updatedConfig) {
+        try {
+            landingConfigService.writeConfigToAzureBlob(updatedConfig, landingConfigAzureFilePath);
+            return ResponseEntity.ok("Landing page config updated successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update landing page config: " + e.getMessage());
+        }
+    }
+
 }
