@@ -1,13 +1,8 @@
 package com.example.ibeproject.service;
 
-import java.util.Collections;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -15,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.ibeproject.constants.GraphQLConstants;
 import com.example.ibeproject.exceptions.PropertyException;
+import com.example.ibeproject.utils.GraphQLRequestBodyUtils;
+import com.example.ibeproject.utils.HttpUtils;
 
 @Service
 public class PropertyService {
@@ -34,17 +31,19 @@ public class PropertyService {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<String> getAllProperties() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.set("x-api-key", apiKey);
-        httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    /**
+     * Retrieves all properties.
+     *
+     * @return A string containing the response body with all properties.
+     * @throws PropertyException If an error occurs while fetching properties.
+     */
+    public String getAllProperties() {
+        HttpHeaders headers = HttpUtils.createHttpHeaders(apiKey);
+        String requestBody = GraphQLRequestBodyUtils.buildQueryRequestBody(listPropertiesQuery);
 
-        String requestBody = "{ \"query\": \"" + listPropertiesQuery + "\" }";
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
         try {
-            return restTemplate.exchange(graphqlServerUrl, HttpMethod.POST, requestEntity, String.class);
+            ResponseEntity<String> responseEntity = HttpUtils.makeHttpRequest(restTemplate, requestBody, headers, graphqlServerUrl);
+            return responseEntity.getBody();
         } catch (RestClientException e) {
             throw new PropertyException("Error fetching properties: ", e);
         }

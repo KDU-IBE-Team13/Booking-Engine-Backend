@@ -1,27 +1,39 @@
 package com.example.ibeproject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ibeproject.dto.property.PropertyResponseDTO;
 import com.example.ibeproject.service.PropertyService;
 
+@CrossOrigin(origins = "${cors.allowed.origin}")
 @RestController
 @RequestMapping("/api/v1/property")
 public class PropertyController {
-    private PropertyService propertyService;
+    private final PropertyService propertyService;
 
+    /**
+     * Constructor for PropertyController.
+     * @param propertyService The service for managing property data.
+     */
     @Autowired
     public PropertyController(PropertyService propertyService) {
         this.propertyService = propertyService;
     }
 
-    @CrossOrigin
+    /**
+     * Retrieves all properties.
+     * @return ResponseEntity containing the response DTO with property data.
+     */
     @GetMapping
-    public ResponseEntity<String> getAllProperties() {
-        return propertyService.getAllProperties();
+    public ResponseEntity<PropertyResponseDTO> getAllProperties() {
+        String properties = propertyService.getAllProperties();
+        PropertyResponseDTO responseDTO = new PropertyResponseDTO(properties);
+        return ResponseEntity.ok(responseDTO);
     }
 }

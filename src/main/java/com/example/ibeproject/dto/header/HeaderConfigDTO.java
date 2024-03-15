@@ -15,8 +15,8 @@ public class HeaderConfigDTO {
     @JsonProperty("logo")
     private String logo;
 
-    // @JsonProperty("title")
-    // private String title;
+    @JsonProperty("title")
+    private String title;
 
     @JsonProperty("supportedLanguages")
     private List<LanguageDTO> supportedLanguages;

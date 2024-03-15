@@ -1,32 +1,39 @@
 package com.example.ibeproject.controller;
 
+import com.example.ibeproject.dto.nightlyrate.NightlyRateResponseDTO;
+import com.example.ibeproject.service.NightlyRateService;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.ibeproject.service.NightlyRateService;
-
-
+@CrossOrigin(origins = "${cors.allowed.origin}")
 @RestController
 @RequestMapping("/api/v1/nightly-rate")
 public class NightlyRateController {
-    private NightlyRateService roomRateService;
+    private final NightlyRateService nightlyRateService;
 
+    /**
+     * @param nightlyRateService The service for managing nightly rates.
+     */
     @Autowired
-    public NightlyRateController(NightlyRateService roomRateService) {
-        this.roomRateService = roomRateService;
+    public NightlyRateController(NightlyRateService nightlyRateService) {
+        this.nightlyRateService = nightlyRateService;
     }
 
-    @CrossOrigin
+    /**
+     * Retrieves nightly rates data.
+     * @param page The page number for pagination.
+     * @param pageSize The size of each page for pagination.
+     * @return ResponseEntity containing the nightly rates data.
+     */
     @GetMapping
-    public ResponseEntity<Map<String, Double>> getAllNightlyRates(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "61") int pageSize) {
-        return roomRateService.getMinimumNightlyRates(page, pageSize);
+    public ResponseEntity<NightlyRateResponseDTO> getAllNightlyRates(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "61") int pageSize) {
+        Map<String, Double> nightlyRates = nightlyRateService.getMinimumNightlyRates(page, pageSize);
+        NightlyRateResponseDTO responseDTO = new NightlyRateResponseDTO();
+        responseDTO.setNightlyRates(nightlyRates);
+        return ResponseEntity.ok(responseDTO);
     }
-
 }
