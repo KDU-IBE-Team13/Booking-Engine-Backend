@@ -43,7 +43,7 @@ public class NightlyRateService {
         this.restTemplate = restTemplate;
     }
 
-     /**
+    /**
      * Retrieves minimum nightly rates.
      *
      * @param page     Page number.

@@ -1,5 +1,8 @@
 package com.example.ibeproject.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ibeproject.dto.property.PropertyResponseDTO;
+import com.example.ibeproject.dto.property.PropertyDTO;
+import com.example.ibeproject.dto.property.PropertyListResponseDTO;
 import com.example.ibeproject.service.PropertyService;
 
 @CrossOrigin(origins = "${cors.allowed.origin}")
@@ -31,9 +35,10 @@ public class PropertyController {
      * @return ResponseEntity containing the response DTO with property data.
      */
     @GetMapping
-    public ResponseEntity<PropertyResponseDTO> getAllProperties() {
-        String properties = propertyService.getAllProperties();
-        PropertyResponseDTO responseDTO = new PropertyResponseDTO(properties);
+    public ResponseEntity<PropertyListResponseDTO> getAllProperties() {
+        List<PropertyDTO> properties = propertyService.getAllProperties();
+        PropertyListResponseDTO responseDTO = new PropertyListResponseDTO(properties);
         return ResponseEntity.ok(responseDTO);
     }
+
 }

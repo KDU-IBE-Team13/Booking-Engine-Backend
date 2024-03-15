@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class PropertyResponseDTO {
-    private String properties;
+@NoArgsConstructor
+public class PropertyDTO {
+    private int propertyId;
+    private String propertyName;
 }

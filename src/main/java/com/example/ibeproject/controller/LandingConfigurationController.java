@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +49,7 @@ public class LandingConfigurationController {
      * @param updatedConfig The updated landing page configuration.
      * @return ResponseEntity indicating the success of the update operation.
      */
-    @PostMapping
+    @PutMapping
     public ResponseEntity<String> updateLandingPageConfig(@RequestBody LandingConfigDTO updatedConfig) {
         landingConfigService.writeConfigToAzureBlob(updatedConfig, landingConfigAzureFilePath);
         return ResponseEntity.ok("Landing page config updated successfully");
