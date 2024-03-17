@@ -22,5 +22,5 @@ public class HeaderConfigDTO {
     private List<LanguageDTO> supportedLanguages;
 
     @JsonProperty("supportedCurrencies")
-    private List<String> supportedCurrencies;
+    private List<CurrencyDTO> supportedCurrencies;
 }
