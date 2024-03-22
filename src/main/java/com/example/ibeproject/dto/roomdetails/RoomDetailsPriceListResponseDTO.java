@@ -1,6 +1,7 @@
-package com.example.ibeproject.dto.property;
+package com.example.ibeproject.dto.roomdetails;
 
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PropertyListResponseDTO {
-    private List<PropertyDTO> properties;
+public class RoomDetailsPriceListResponseDTO {
+    private List<RoomDetailsPricesDTO> roomsDetails;
 }
