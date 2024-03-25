@@ -112,6 +112,8 @@ public class RoomAvailabilityDetailsService {
                                 responseDTO.getRoomsDetails().sort(comparator);
                         }
                 }
+                List<RoomDetailsPricesDTO> list = responseDTO.getRoomsDetails();
+                responseDTO.setResponseLength(list.size());
 
                 int startIdx = (page - 1) * pageSize;
                 int endIdx = Math.min(startIdx + pageSize, responseDTO.getRoomsDetails().size());
@@ -121,6 +123,8 @@ public class RoomAvailabilityDetailsService {
                         responseDTO.setRoomsDetails(Collections.emptyList());
                 }
 
+                // List<RoomDetailsPricesDTO> list = responseDTO.getRoomsDetails();
+                // responseDTO.setResponseLength(list.size());
                 return responseDTO;
         }
 

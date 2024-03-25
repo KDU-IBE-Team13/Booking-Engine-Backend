@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RoomDetailsPriceListResponseDTO {
     private List<RoomDetailsPricesDTO> roomsDetails;
+    private int responseLength;
 }
