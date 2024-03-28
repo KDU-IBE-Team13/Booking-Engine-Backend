@@ -5,7 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.example.ibeproject.constants.GraphQLConstants;
 import com.example.ibeproject.dto.promotions.PromotionDTO;
+import com.example.ibeproject.dto.promotions.PromotionResponseDTO;
 import com.example.ibeproject.exceptions.RoomDetailsNotFoundException;
 import com.example.ibeproject.utils.GraphQLRequestBodyUtils;
 import com.example.ibeproject.utils.HttpUtils;
@@ -61,7 +65,17 @@ public class PromotionService {
     }
 
 
-    public List<PromotionDTO> getApplicablePromotions(int tenantId, int propertyId, String checkInDate, String checkOutDate, Boolean isSeniorCitizen, boolean isMilitaryPersonnel) {
+
+    public PromotionDTO getHighestPriceFactorPromotion(List<PromotionDTO> promotionsListCopy) {
+        Optional<PromotionDTO> highestPricePromotion = promotionsListCopy.stream()
+                .max(Comparator.comparingDouble(PromotionDTO::getPriceFactor));
+        
+        return highestPricePromotion.orElse(null);
+    }
+
+
+
+    public PromotionResponseDTO getApplicablePromotions(int tenantId, int propertyId, String checkInDate, String checkOutDate, Boolean isSeniorCitizen, boolean isMilitaryPersonnel) {
         HttpHeaders headers = HttpUtils.createHttpHeaders(apiKey);
         String requestBody = GraphQLRequestBodyUtils.buildQueryRequestBody(listPromotionsQuery);
         List<PromotionDTO> promotionsList = new ArrayList<>();
@@ -124,13 +138,20 @@ public class PromotionService {
 
             for(PromotionDTO promotionEle: promotionsList)
             {
-                if((promotionEle.getMinimumDaysOfStay() < diffInDays + 1) && (promotionEle.isDeactivated() == false))
+                if((promotionEle.getMinimumDaysOfStay() < diffInDays + 1) && (!promotionEle.isDeactivated()))
                 {
                     promotionsListCopy.add(promotionEle);
                 }
             }
 
-            return promotionsListCopy;
+            PromotionDTO highestPricePromotion = getHighestPriceFactorPromotion(promotionsListCopy);
+System.out.println("Highest price promotion: " + highestPricePromotion);
+
+            PromotionResponseDTO promotionResponse = new PromotionResponseDTO();
+            promotionResponse.setApplicablePromotions(promotionsListCopy);
+            promotionResponse.setBestPromotion(highestPricePromotion);
+
+            return promotionResponse;
 
         } catch (IOException e) {
             throw new RoomDetailsNotFoundException("Error fetching Room details: ", e);

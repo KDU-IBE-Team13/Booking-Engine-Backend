@@ -42,6 +42,8 @@ secrets.yml
 .git-hooks/
 
 *.properties
+application.properties
+resources/*
 
 .idea/
 

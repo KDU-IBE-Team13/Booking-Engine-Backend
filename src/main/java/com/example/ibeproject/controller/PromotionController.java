@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.ibeproject.dto.promotions.PromotionDTO;
+import com.example.ibeproject.dto.promotions.PromotionResponseDTO;
 import com.example.ibeproject.service.PromotionService;
 @RestController
 @RequestMapping("/api/v1/promotions")
@@ -25,7 +26,7 @@ public class PromotionController {
     }
 
     @GetMapping(value="applicable-promos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PromotionDTO>> getApplicablePromotions(
+    public ResponseEntity<PromotionResponseDTO> getApplicablePromotions(
         @RequestParam int tenantId,
         @RequestParam int propertyId,
         @RequestParam String checkInDate,
@@ -33,7 +34,7 @@ public class PromotionController {
         @RequestParam(defaultValue = "false") Boolean isSeniorCitizen,
         @RequestParam(defaultValue = "false") Boolean isMilitaryPersonnel
     ) {
-        List<PromotionDTO> promotionDetails = promotionService.getApplicablePromotions(tenantId, propertyId, checkInDate, checkOutDate, isSeniorCitizen, isMilitaryPersonnel);
+        PromotionResponseDTO promotionDetails = promotionService.getApplicablePromotions(tenantId, propertyId, checkInDate, checkOutDate, isSeniorCitizen, isMilitaryPersonnel);
         return ResponseEntity.ok(promotionDetails);
     }
 }
